@@ -1,0 +1,193 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, total={6.5in, 9in}]{geometry}
+\usepackage[indonesian]{babel}
+\usepackage{pdfpages}
+\usepackage{mathtools}
+\usepackage{braket}
+\usepackage{slashbox}
+\usepackage{comment}
+\usepackage{indentfirst}
+\usepackage{amssymb}
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+	\begin{figure}[htp]
+		\includepdf[fitpaper=true, trim={0 3cm 0 -5cm}]{format_daa.pdf}
+	\end{figure}
+	\begin{flushleft}
+	\end{flushleft}
+	\begin{flushleft}
+	\end{flushleft}
+	\begin{flushleft}
+	\end{flushleft}
+
+	\section*{Keunggulan dan Kelemahan dari Brute Force}
+	\noindent Keunggulan brute-force:
+	\begin{itemize}
+		\item Sangat sederhana dan mudah untuk dibuat, tidak pelu memerlukan pengetahuan khusus
+		apapun untuk menggunakan atau membuat algoritma jenis ini.
+		\item Dapat digunakan untuk menyelesaikan sebagian besar masalah.
+		\item Sering digunakan untuk menyelesaikan beberapa masalah seperti pencarian, pengurutan, pencocokan string, dan lain-lain.
+		\item Dapat dijadikan sebagai pembanding terhadap algoritma lain.
+	\end{itemize}
+	Kelemahan brute-force:
+	\begin{itemize}
+		\item Umumnya tidak efisien dalam menyelesaikan masalah yang besar.
+		\item Tidak cocok untuk memecahkan masalah yang memiliki struktur hierarkis dan melibatkan
+		operasi logis.
+	\end{itemize}
+	
+	\section*{Karakteristik Brute Force}
+	\begin{itemize}
+		\item Mudah diimplementasikan.
+		\item Melibatkan perhitungan langsung berdasarkan pernyataan masalah dan definisi dari
+		konsep yang terlibat.
+		\item Mencari semua kemungkinan solusi yang cocok untuk masalah secara keseluruhan.
+		\item Umumnya lambat dan tidak efisien. Tidak cocok untuk menyelesaikan masalah yang besar.
+		\item Memiliki kompleksitasi waktu yang besar.
+	\end{itemize}
+
+	\section*{Penyelesaian Kasus Brute Force}
+		
+	Sebuah studio musik membuka layanan sewa studio untuk berlatih musik. Penyewa yang hendak berlatih
+	harus melakukan pendaftaran dua hari sebelum menggunakan studio. Studio hanya membuka layanan
+	selama 14 jam.
+	
+	Setiap penyewa harus menulis waktu mulai dan waktu berakhir (semua dalam bilangan
+	bulat). Karena permintaan sewa sangat banyak, sementara studio hanya melayani satu penyewa, maka
+	pemilik studio harus memilih dan menjadwalkan grup band yang akan menyewa. Sehingga sebanyak
+	mungkin grup band yang dapat dilayani. Terlampir tabel 10 penyewa.
+
+	\begin{table}[h!]
+		\caption{Daftar Penyewa}
+		\centering
+		\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c| }
+			\hline
+			\textbf{No. Grup Band} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} \\
+			\hline
+			Mulai    & 1 & 3 & 2 & 4 & 8 & 7 & 9 & 11 & 9 & 12 \\
+			\hline				
+			Akhir	 & 3 & 4 & 5 & 7 & 9 & 10 & 11 & 12 & 13 & 14 \\
+			\hline
+		\end{tabular}
+	\end{table}	
+	
+	Jika persoalan diselesaikan dengan algoritma Brute Force, bagaimana caranya dan berapa kompleksitas 
+	algoritmanya dalam notasi Big O?
+	\newpage
+	\subsection*{Jawaban}
+	
+	\paragraph{Ketentuan} \noindent Studio hanya dapat melayani satu grup band (penyewa) dalam
+	rentang waktu sewanya dengan batas waktu pelayanan, yang berarti grup band tidak dapat memakai
+	studio jika rentang waktunya bertabrakan dengan rentang waktu grup band lain. Jika
+	bertabrakan atau melebihi batas waktu pelayanan maka sesi grup band tersebut akan dipindahkan
+	ke hari berikutnya. Sebaliknya, grup band akan diizinkan berlatih pada hari	tersebut jika rentang
+	waktunya tidak bertabrakan atau melebihi batas waktu pelayanan.
+	
+	\noindent \\Berikut ini bentuk dari algoritma brute-force berdasarkan ketentuan di atas:
+	
+	\begin{algorithm}
+		\caption{Algoritma brute-force penjadwalan penyewa studio}
+		\KwIn{Waktu mulai ($s$), Waktu selesai ($f$), Batas waktu ($m$)}
+		\KwOut{Grup band hari pertama ($A$), Grup band hari berikutnya ($B$)}
+		\Begin{
+			$n \gets \operatorname{len}(s)$ \tcp*[l]{Mengambil panjang input $s$}
+			$t \gets 1$ \tcp*[l]{Waktu terakhir pemakaian studio}
+			$A \gets \{\varnothing\}$ \tcp*[l]{Jadwal grup band hari pertama}
+			$B \gets \{\varnothing\}$ \tcp*[l]{Jadwal grup band hari berikutnya}
+			
+			\BlankLine
+			\If{$n \neq \operatorname{len}(f)$} {
+				exit
+			}
+			\BlankLine
+			\tcp{Lakukan proses brute-force}
+			\For{$i \gets 1$ \KwTo $n$} {
+				\uIf{$s_{i} \geq t \land f_{i} \leq m$} {
+					$A \gets A \cup \{i\}$\;
+					$t \gets f_{i}$\;
+				}
+				\Else{
+					$B \gets B \cup \{i\}$\;
+				}
+			}
+			\BlankLine
+			\Return $A, B$
+		}
+	\end{algorithm}
+	\subsection*{Proses penyelesaian kasus}
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c| }
+			\hline
+			\textbf{No. Grup Band} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} \\
+			\hline
+			Mulai ($s$)  & 1 & 3 & 2 & 4 & 8 & 7 & 9 & 11 & 9 & 12 \\
+			\hline				
+			Akhir ($f$) & 3 & 4 & 5 & 7 & 9 & 10 & 11 & 12 & 13 & 14 \\
+			\hline
+		\end{tabular}
+	\end{table}	
+	
+	\noindent Memulai dari $i = 1$ dengan $t = 1$ dan $m = 14$
+	\begin{itemize}
+		\item $i = 1, s_{1} = 1, f_{1} = 3, t = 1$.\\Kondisi $s_{1} \geq t \land f_{1} \leq m$ terpenuhi, maka jadwalkan grup band no. 1 di hari pertama.\\Ubah $t \gets f_1$ dan lanjut ke $i = 2$
+		\item $i = 2, s_{2} = 3, f_{2} = 4, t = 3$.\\Kondisi $s_{2} \geq t \land f_{2} \leq m$ terpenuhi, maka jadwalkan grup band no. 2 di hari pertama.\\Ubah $t \gets f_2$ dan lanjut ke $i = 3$
+		\item $i = 3, s_{3} = 2, f_{3} = 5, t = 4$.\\Kondisi $s_{3} \geq t \land f_{3} \leq m$ tidak terpenuhi, maka jadwalkan grup band no. 3 di hari berikutnya.\\Lanjut ke $i = 4$
+		\item $i = 4, s_{4} = 4, f_{4} = 7, t = 4$.\\Kondisi $s_{4} \geq t \land f_{4} \leq m$ terpenuhi, maka jadwalkan grup band no. 4 di hari pertama.\\Ubah $t \gets f_4$ dan lanjut ke $i = 5$
+		\item $i = 5, s_{5} = 8, f_{5} = 9, t = 7$.\\Kondisi $s_{5} \geq t \land f_{5} \leq m$ terpenuhi, maka jadwalkan grup band no. 5 di hari pertama.\\Ubah $t \gets f_5$ dan lanjut ke $i = 6$
+		\item $i = 6, s_{6} = 7, f_{6} = 10, t = 9$.\\Kondisi $s_{6} \geq t \land f_{6} \leq m$ tidak terpenuhi, maka jadwalkan grup band no. 6 di hari berikutnya.\\Lanjut ke $i = 7$
+		\item $i = 7, s_{7} = 9, f_{7} = 11, t = 9$.\\Kondisi $s_{7} \geq t \land f_{7} \leq m$ terpenuhi, maka jadwalkan grup band no. 7 di hari pertama.\\Ubah $t \gets f_7$ dan lanjut ke $i = 8$
+		\item $i = 8, s_{8} = 11, f_{8} = 12, t = 11$.\\Kondisi $s_{8} \geq t \land f_{8} \leq m$ terpenuhi, maka jadwalkan grup band no. 8 di hari pertama.\\Ubah $t \gets f_8$ dan lanjut ke $i = 9$
+		\item $i = 9, s_{9} = 9, f_{9} = 13, t = 12$.\\Kondisi $s_{9} \geq t \land f_{9} \leq m$ tidak terpenuhi, maka jadwalkan grup band no. 9 di hari berikutnya.\\Lanjut ke $i = 10$
+		\item $i = 10, s_{10} = 12, f_{10} = 14, t = 12$.\\Kondisi $s_{10} \geq t \land f_{10} \leq m$ terpenuhi, maka jadwalkan grup band no. 10 di hari pertama.
+	\end{itemize}
+	
+	\noindent Hasil penjadwalan grup band berdasarkan penyelesaian di atas:
+	\noindent \\Jadwal grup band hari pertama $\Rightarrow$ 1, 2, 4, 5, 7, 8, 10
+	\noindent \\Jadwal grup band hari berikutnya $\Rightarrow$ 3, 6, 9
+	
+	\subsection*{Kompleksitas Waktu}
+	Algoritma di atas memiliki kompleksitas waktu $O(n)$. Pertumbuhan algoritma ini meningkat secara 
+	relatif seiring bertambahnya input.
+	
+	\newpage
+	\subsection*{Implementasi pada Bahasa Pemrograman Python}
+	\lstinputlisting[language=Python]{tugas_6_src.py}
+	Output:
+	\lstinputlisting{tugas_6_out.txt}
+	
+	Source code dokumen ini dan implementasi dapat diambil dari github saya: \url{https://github.com/gusti32/tugas6-daa}
+	
+\end{document}
